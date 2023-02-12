@@ -9,9 +9,14 @@ class Piece(Enum):
     ORANGE_BIG = 0x01
     ORANGE_MEDIUM = 0x02
     ORANGE_SMALL = 0x04
-    BLUE_BIG = 0x08
-    BLUE_MEDIUM = 0x10
+    BLUE_BIG = 0x10
+    BLUE_MEDIUM = 0x20
     BLUE_SMALL = 0x20
+
+
+class Player(Enum):
+    ORANGE = 0x07
+    BLUE = 0x70
 
 
 class State:
@@ -21,9 +26,14 @@ class State:
     each the first six bits of the value indicating if the given piece is in the square. The bit to piece mapping 
     is given by the Pieces enum."""
 
+    to_play: Player
+    """Which player should play next."""
+
     symmetries = None
 
-    def __init__(self, pieces: list[tuple[int, int, Piece]] = None):
+    def __init__(self, to_play: Player, pieces: list[tuple[int, int, Piece]] = None):
+        self.to_play = to_play
+
         # Initilize the symmetries, if necessary
         if self.symmetries == None:
             self.create_symmetries()
