@@ -70,15 +70,15 @@ class State:
 
             equivalent_boards.append(equivalent_board)
 
-        smallest = None
+        largest = None
         for board in equivalent_boards:
-            if smallest is None:
-                smallest = board
-            elif self._lexographic_greater_than(board, smallest):
-                smallest = board
+            if largest is None:
+                largest = board
+            elif self._lexographic_greater_than(board, largest):
+                largest = board
 
         # Save off the cannonical board
-        self._board = smallest
+        self._board = largest
 
     def play(
         self, piece: Piece, from_row: int, from_col: int, to_row: int, to_col: int
