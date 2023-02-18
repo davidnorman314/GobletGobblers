@@ -19,8 +19,12 @@ class Player(Enum):
     BLUE = 0x70
 
 
-class State:
+class Source(Enum):
+    ORANGE = 0x07
+    BLUE = 0x70
 
+
+class State:
     _board: np.ndarray
     """The board. This is an array of size nine, one for each square of the board. The array is np.int8, with
     each the first six bits of the value indicating if the given piece is in the square. The bit to piece mapping 
@@ -31,18 +35,27 @@ class State:
 
     symmetries = None
 
-    def __init__(self, to_play: Player, pieces: list[tuple[int, int, Piece]] = None):
+    def __init__(
+        self,
+        to_play: Player,
+        initial_board: np.ndarray = None,
+        pieces: list[tuple[int, int, Piece]] = None,
+    ):
         self.to_play = to_play
 
         # Initilize the symmetries, if necessary
         if self.symmetries == None:
             self.create_symmetries()
 
-        initial_board = np.zeros(shape=9, dtype=np.int8)
+        if initial_board is None:
+            initial_board = np.zeros(shape=9, dtype=np.int8)
+        else:
+            initial_board = initial_board.copy()
 
         # Add the pieces to the board
-        for x, y, piece in pieces:
-            initial_board[3 * x + y] = piece.value
+        if pieces is not None:
+            for row, col, piece in pieces:
+                initial_board[3 * row + col] = piece.value
 
         # Check all the boards that equivalent by symmetery and pick the cannonical one.
         # We don't need to create an equivalent board using the identity.
@@ -61,11 +74,29 @@ class State:
         for board in equivalent_boards:
             if smallest is None:
                 smallest = board
-            elif self._lexographic_less_than(board, smallest):
+            elif self._lexographic_greater_than(board, smallest):
                 smallest = board
 
         # Save off the cannonical board
         self._board = smallest
+
+    def play(
+        self, piece: Piece, from_row: int, from_col: int, to_row: int, to_col: int
+    ) -> "State":
+        """Plays a piece. If from_row and from_col are None, then the piece
+        is taken from the players hand and put on the board."""
+
+        # From_row and from_col must be either both None or neither None
+        assert (from_row is None) == (from_col is None)
+
+        # Get the next player
+        next_player = Player.ORANGE if self.to_play == Player.BLUE else Player.BLUE
+
+        return State(
+            to_play=next_player,
+            initial_board=self._board,
+            pieces=[(to_row, to_col, piece)],
+        )
 
     def __eq__(self, o):
         assert isinstance(o, State)
@@ -75,12 +106,12 @@ class State:
     def __nq__(self, o):
         return not self.__eq__(o)
 
-    def _lexographic_less_than(self, b1: np.ndarray, b2: np.ndarray):
+    def _lexographic_greater_than(self, b1: np.ndarray, b2: np.ndarray):
         for x, y in zip(b1, b2):
             if x == y:
                 continue
 
-            return x < y
+            return x > y
 
         return False
 
@@ -180,3 +211,6 @@ class State:
             print(f"{a} {b} {c} {mid} {x} {y} {z}")
 
         print("")
+
+    def __repr__(self):
+        return str(self._board)

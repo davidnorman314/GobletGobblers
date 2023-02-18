@@ -11,6 +11,7 @@ def test_state():
     state2 = State(Player.BLUE, pieces=[(0, 0, Piece.ORANGE_BIG)])
     assert state2.to_play == Player.BLUE
 
+
 def test_state_symmetry():
     """Test that the State object takes into account board symmetries, i.e., each
     board is converted to a cannonical equivalent board."""
@@ -38,68 +39,68 @@ def test_state_symmetry():
 
     # Test when three corners are occupied by different pieces
     state_big_1 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_MEDIUM),
             (1, 0, Piece.ORANGE_SMALL),
             (0, 1, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_2 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_MEDIUM),
             (0, 1, Piece.ORANGE_SMALL),
             (1, 0, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_3 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 0, Piece.ORANGE_MEDIUM),
             (1, 0, Piece.ORANGE_SMALL),
             (2, 1, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_4 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 0, Piece.ORANGE_MEDIUM),
             (2, 1, Piece.ORANGE_SMALL),
             (1, 0, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_5 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 2, Piece.ORANGE_MEDIUM),
             (0, 1, Piece.ORANGE_SMALL),
             (1, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_6 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 2, Piece.ORANGE_MEDIUM),
             (1, 2, Piece.ORANGE_SMALL),
             (0, 1, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_7 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 2, Piece.ORANGE_MEDIUM),
             (1, 2, Piece.ORANGE_SMALL),
             (2, 1, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_8 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 2, Piece.ORANGE_MEDIUM),
             (2, 1, Piece.ORANGE_SMALL),
             (1, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
 
     assert state_big_1 == state_big_2
@@ -111,12 +112,12 @@ def test_state_symmetry():
     assert state_big_1 == state_big_8
 
     state_big_a = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 2, Piece.ORANGE_SMALL),
             (2, 1, Piece.ORANGE_MEDIUM),
             (1, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
 
     assert state_big_1 != state_big_a
@@ -144,68 +145,68 @@ def test_state_symmetry():
 
     # Test when there is one side occupied by different pieces.
     state_big_1 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_MEDIUM),
             (1, 0, Piece.ORANGE_SMALL),
             (2, 0, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_2 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_MEDIUM),
             (0, 1, Piece.ORANGE_SMALL),
             (0, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_3 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 2, Piece.ORANGE_MEDIUM),
             (1, 2, Piece.ORANGE_SMALL),
             (2, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_4 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 0, Piece.ORANGE_MEDIUM),
             (2, 1, Piece.ORANGE_SMALL),
             (2, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_5 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 0, Piece.ORANGE_MEDIUM),
             (1, 0, Piece.ORANGE_SMALL),
             (0, 0, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_6 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 2, Piece.ORANGE_MEDIUM),
             (0, 1, Piece.ORANGE_SMALL),
             (0, 0, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_7 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 2, Piece.ORANGE_MEDIUM),
             (1, 2, Piece.ORANGE_SMALL),
             (0, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_8 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 2, Piece.ORANGE_MEDIUM),
             (2, 1, Piece.ORANGE_SMALL),
             (2, 0, Piece.ORANGE_BIG),
-        ]
+        ],
     )
 
     assert state_big_1 == state_big_2
@@ -217,36 +218,36 @@ def test_state_symmetry():
     assert state_big_1 == state_big_8
 
     state_big_a = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 2, Piece.ORANGE_MEDIUM),
             (1, 0, Piece.ORANGE_SMALL),
             (2, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_b = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_MEDIUM),
             (1, 2, Piece.ORANGE_SMALL),
             (2, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_c = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_SMALL),
             (0, 1, Piece.ORANGE_MEDIUM),
             (0, 2, Piece.ORANGE_BIG),
-        ]
+        ],
     )
     state_big_d = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_SMALL),
             (0, 1, Piece.ORANGE_BIG),
             (0, 2, Piece.ORANGE_MEDIUM),
-        ]
+        ],
     )
 
     assert state_big_1 != state_big_a
@@ -263,9 +264,15 @@ def test_state_symmetry():
     assert state_1 != state_3
     assert state_2 != state_3
 
-    state_1 = State(Player.ORANGE, pieces=[(1, 1, Piece.ORANGE_MEDIUM), (2, 2, Piece.BLUE_MEDIUM)])
-    state_2 = State(Player.ORANGE, pieces=[(1, 1, Piece.ORANGE_MEDIUM), (0, 0, Piece.BLUE_MEDIUM)])
-    state_3 = State(Player.ORANGE, pieces=[(1, 1, Piece.ORANGE_MEDIUM), (2, 2, Piece.BLUE_BIG)])
+    state_1 = State(
+        Player.ORANGE, pieces=[(1, 1, Piece.ORANGE_MEDIUM), (2, 2, Piece.BLUE_MEDIUM)]
+    )
+    state_2 = State(
+        Player.ORANGE, pieces=[(1, 1, Piece.ORANGE_MEDIUM), (0, 0, Piece.BLUE_MEDIUM)]
+    )
+    state_3 = State(
+        Player.ORANGE, pieces=[(1, 1, Piece.ORANGE_MEDIUM), (2, 2, Piece.BLUE_BIG)]
+    )
 
     assert state_1 == state_2
     assert state_1 != state_3
@@ -273,7 +280,7 @@ def test_state_symmetry():
 
     # Test where all cells are filled in
     state_1 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (0, 0, Piece.ORANGE_SMALL),
             (0, 1, Piece.ORANGE_MEDIUM),
@@ -284,10 +291,10 @@ def test_state_symmetry():
             (2, 0, Piece.BLUE_SMALL),
             (2, 1, Piece.BLUE_MEDIUM),
             (2, 2, Piece.BLUE_BIG),
-        ]
+        ],
     )
     state_2 = State(
-        to_play = Player.ORANGE,
+        to_play=Player.ORANGE,
         pieces=[
             (2, 0, Piece.ORANGE_SMALL),
             (1, 0, Piece.ORANGE_MEDIUM),
@@ -298,15 +305,52 @@ def test_state_symmetry():
             (2, 2, Piece.BLUE_SMALL),
             (1, 2, Piece.BLUE_MEDIUM),
             (0, 2, Piece.BLUE_BIG),
-        ]
+        ],
     )
 
     assert state_1 == state_2
+
+
+def test_next_player():
+    """Test that playing changes the to_play member of State."""
+
+    # Test where blue plays first
+    state = State(Player.BLUE, pieces=[])
+    actual = state.play(Piece.BLUE_BIG, None, None, 0, 0)
+
+    assert actual.to_play == Player.ORANGE
+
+    # Test where orange plays first
+    state = State(Player.ORANGE, pieces=[])
+    actual = state.play(Piece.ORANGE_BIG, None, None, 0, 0)
+
+    assert actual.to_play == Player.BLUE
 
 
 def test_play_new_piece():
     """Test creating a new state by playing a piece in an existing state.
     Here we test playing a piece that isn't on the board."""
 
-    # TODO: Finish this
-    pass
+    # Test playing a single piece on an empty board
+    state = State(Player.ORANGE, pieces=[])
+    actual = state.play(Piece.ORANGE_BIG, None, None, 0, 0)
+
+    expected = State(Player.BLUE, pieces=[(0, 0, Piece.ORANGE_BIG)])
+    assert actual == expected
+
+    # Test playing a single piece on an empty board where symmetry
+    # is used.
+    state = State(Player.ORANGE, pieces=[])
+    actual = state.play(Piece.ORANGE_BIG, None, None, 2, 2)
+
+    expected = State(Player.BLUE, pieces=[(0, 0, Piece.ORANGE_BIG)])
+    assert actual == expected
+
+    # Test playing a single piece on a board with a single piece
+    state = State(Player.ORANGE, pieces=[(0, 1, Piece.BLUE_BIG)])
+    actual = state.play(Piece.ORANGE_BIG, None, None, 0, 0)
+
+    expected = State(
+        Player.BLUE, pieces=[(0, 1, Piece.BLUE_BIG), (0, 0, Piece.ORANGE_BIG)]
+    )
+    assert actual == expected
