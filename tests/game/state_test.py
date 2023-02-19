@@ -379,3 +379,42 @@ def test_play_new_piece():
         Player.BLUE, pieces=[(0, 1, Piece.BLUE_BIG), (0, 0, Piece.ORANGE_BIG)]
     )
     assert actual == expected
+
+
+def test_move_piece():
+    """Test creating a new state by moving a piece in an existing state."""
+
+    # Test moving a piece on the board
+    state = State(
+        Player.ORANGE, pieces=[(0, 0, Piece.BLUE_BIG), (0, 1, Piece.ORANGE_BIG)]
+    )
+    actual = state.play(Piece.ORANGE_BIG, 0, 1, 2, 2)
+
+    expected = State(
+        Player.BLUE, pieces=[(0, 0, Piece.BLUE_BIG), (2, 2, Piece.ORANGE_BIG)]
+    )
+    assert actual == expected
+
+    # Test moving a piece on the board where there are two pieces on the same
+    # space
+    state = State(
+        Player.ORANGE, pieces=[(0, 0, Piece.BLUE_SMALL), (0, 0, Piece.ORANGE_BIG)]
+    )
+    actual = state.play(Piece.ORANGE_BIG, 0, 0, 2, 2)
+
+    expected = State(
+        Player.BLUE, pieces=[(0, 0, Piece.BLUE_SMALL), (2, 2, Piece.ORANGE_BIG)]
+    )
+    assert actual == expected
+
+    # Test moving a piece on the board where there is a piece on the destination
+    # space.
+    state = State(
+        Player.ORANGE, pieces=[(0, 0, Piece.BLUE_SMALL), (2, 2, Piece.ORANGE_BIG)]
+    )
+    actual = state.play(Piece.ORANGE_BIG, 2, 2, 0, 0)
+
+    expected = State(
+        Player.BLUE, pieces=[(0, 0, Piece.BLUE_SMALL), (0, 0, Piece.ORANGE_BIG)]
+    )
+    assert actual == expected

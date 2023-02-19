@@ -49,8 +49,6 @@ class State:
 
         if initial_board is None:
             initial_board = np.zeros(shape=9, dtype=np.int8)
-        else:
-            initial_board = initial_board.copy()
 
         # Add the pieces to the board
         if pieces is not None:
@@ -92,9 +90,16 @@ class State:
         # Get the next player
         next_player = Player.ORANGE if self.to_play == Player.BLUE else Player.BLUE
 
+        # Create the board for the new state
+        initial_board = self._board.copy()
+
+        if from_row is not None:
+            assert initial_board[3 * from_row + from_col] & piece.value != 0
+            initial_board[3 * from_row + from_col] &= ~piece.value
+
         return State(
             to_play=next_player,
-            initial_board=self._board,
+            initial_board=initial_board,
             pieces=[(to_row, to_col, piece)],
         )
 
