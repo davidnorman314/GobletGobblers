@@ -138,14 +138,23 @@ class State:
                 owner[i] = Player.BLUE.value
 
         # Check each possible win
+        blue_win = False
+        orange_win = False
         for indices in self.win_indices:
-            if (
-                owner[indices[0]] != 0
-                and owner[indices[0]] == owner[indices[1]] == owner[indices[2]]
-            ):
-                return Player(owner[indices[0]])
+            if owner[indices[0]] == owner[indices[1]] == owner[indices[2]]:
+                if owner[indices[0]] == Player.ORANGE.value:
+                    orange_win = True
+                elif owner[indices[0]] == Player.BLUE.value:
+                    blue_win = True
 
-        return None
+        if blue_win and orange_win:
+            return Player.BLUE if self.to_play == Player.ORANGE else Player.ORANGE
+        elif blue_win:
+            return Player.BLUE
+        elif orange_win:
+            return Player.ORANGE
+        else:
+            return None
 
     def __eq__(self, o):
         assert isinstance(o, State)

@@ -757,6 +757,28 @@ def test_is_win_row_column_inside():
     assert state.is_win() == None
 
 
+def test_is_win_both_players():
+    """Tests the is_win method where both players have a win on the board. In this
+    case the player who played last wins. I'm not sure this is explicit in the
+    official rules, but seems reasonable."""
+
+    # Test where blue has three pieces along an inside row.
+    base_win = [
+        (1, 0, Piece.BLUE_SMALL),
+        (1, 1, Piece.BLUE_SMALL),
+        (1, 2, Piece.BLUE_MEDIUM),
+        (2, 0, Piece.ORANGE_SMALL),
+        (2, 1, Piece.ORANGE_SMALL),
+        (2, 2, Piece.ORANGE_MEDIUM),
+    ]
+
+    state = State(Player.ORANGE, pieces=base_win)
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.BLUE, pieces=base_win)
+    assert state.is_win() == Player.ORANGE
+
+
 def test_is_win_other():
     """Test other is_win cases"""
 
