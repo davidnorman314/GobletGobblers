@@ -35,6 +35,8 @@ class State:
 
     symmetries = None
 
+    win_indices: list[list[int]] = None
+
     def __init__(
         self,
         to_play: Player,
@@ -49,6 +51,18 @@ class State:
 
         if initial_board is None:
             initial_board = np.zeros(shape=9, dtype=np.int8)
+
+        # Initialize win_indices, if necessary
+        if self.win_indices == None:
+            self.win_indices = [
+                # Diagonals
+                [3 * 0 + 0, 3 * 1 + 1, 3 * 2 + 2],
+                [3 * 2 + 0, 3 * 1 + 1, 3 * 0 + 2],
+                # Rows
+                [3 * 0 + 0, 3 * 0 + 1, 3 * 0 + 2],
+                # Columns
+                [3 * 0 + 2, 3 * 1 + 2, 3 * 2 + 2],
+            ]
 
         # Add the pieces to the board
         if pieces is not None:
@@ -102,6 +116,32 @@ class State:
             initial_board=initial_board,
             pieces=[(to_row, to_col, piece)],
         )
+
+    def is_win(self) -> Player:
+        """Checks to see if a state is a win for a player. If it is a win, the
+        winner is returned. Otherwise None is returned."""
+
+        # Calculate who owns each square of the board
+        owner = np.zeros(shape=9, dtype=np.int8)
+        for i in range(9):
+            square_state = self._board[i]
+            orange_state = square_state & Player.ORANGE.value
+            blue_state = (square_state & Player.BLUE.value) >> 3
+
+            if orange_state > blue_state:
+                owner[i] = Player.ORANGE.value
+            elif orange_state < blue_state:
+                owner[i] = Player.BLUE.value
+
+        # Check each possible win
+        for indices in self.win_indices:
+            if (
+                owner[indices[0]] != 0
+                and owner[indices[0]] == owner[indices[1]] == owner[indices[2]]
+            ):
+                return Player(owner[indices[0]])
+
+        return None
 
     def __eq__(self, o):
         assert isinstance(o, State)
