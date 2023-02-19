@@ -311,6 +311,31 @@ def test_state_symmetry():
     assert state_1 == state_2
 
 
+def test_state_multiple_pieces_one_square():
+    """Test that the State object takes into account board symmetries, i.e., each
+    board is converted to a cannonical equivalent board. Here we test where
+    there are multiple pieces on one space."""
+
+    # Test where we add the pieces in different orders
+    state1 = State(
+        Player.ORANGE, pieces=[(0, 0, Piece.ORANGE_BIG), (0, 0, Piece.BLUE_MEDIUM)]
+    )
+    state2 = State(
+        Player.ORANGE, pieces=[(0, 0, Piece.BLUE_MEDIUM), (0, 0, Piece.ORANGE_BIG)]
+    )
+
+    state3 = State(Player.ORANGE, pieces=[(0, 0, Piece.ORANGE_BIG)])
+    state4 = State(Player.ORANGE, pieces=[(0, 0, Piece.BLUE_MEDIUM)])
+
+    assert state1 != state3
+    assert state1 != state4
+
+    assert state2 != state3
+    assert state2 != state4
+
+    assert state1 == state2
+
+
 def test_next_player():
     """Test that playing changes the to_play member of State."""
 

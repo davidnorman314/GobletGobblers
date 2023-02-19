@@ -55,7 +55,7 @@ class State:
         # Add the pieces to the board
         if pieces is not None:
             for row, col, piece in pieces:
-                initial_board[3 * row + col] = piece.value
+                initial_board[3 * row + col] |= piece.value
 
         # Check all the boards that equivalent by symmetery and pick the cannonical one.
         # We don't need to create an equivalent board using the identity.
