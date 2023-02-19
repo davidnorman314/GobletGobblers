@@ -504,7 +504,7 @@ def test_is_win_row():
     assert state.is_win() == None
 
     # Test where blue has three pieces along an outside row and the big piece
-    # is in a corner
+    # is in a corner of the row.
     base_win = [
         (0, 0, Piece.BLUE_SMALL),
         (0, 1, Piece.BLUE_MEDIUM),
@@ -518,6 +518,62 @@ def test_is_win_row():
     assert state.is_win() == Player.BLUE
 
     state = State(Player.ORANGE, pieces=[*base_win, (2, 0, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 0, Piece.ORANGE_BIG)])
+    assert state.is_win() == None
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 0, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == None
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 1, Piece.ORANGE_BIG)])
+    assert state.is_win() == None
+
+    # Test where blue has three pieces along an outside row consisting of small
+    # and medium pieces.
+    base_win = [
+        (0, 0, Piece.BLUE_SMALL),
+        (0, 1, Piece.BLUE_SMALL),
+        (0, 2, Piece.BLUE_MEDIUM),
+    ]
+
+    state = State(Player.ORANGE, pieces=base_win)
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 0, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 1, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 2, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 0, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 1, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 2, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 2, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 2, Piece.BLUE_BIG)])
     assert state.is_win() == Player.BLUE
 
     state = State(Player.ORANGE, pieces=[*base_win, (0, 0, Piece.ORANGE_BIG)])
@@ -555,7 +611,7 @@ def test_is_win_row():
     assert state.is_win() == None
 
     # Test where orange has three pieces along an outside row and the big piece
-    # is in a corner
+    # is in a corner of the row.
     base_win = [
         (0, 0, Piece.ORANGE_SMALL),
         (0, 1, Piece.ORANGE_MEDIUM),
@@ -569,6 +625,85 @@ def test_is_win_row():
     assert state.is_win() == Player.ORANGE
 
     state = State(Player.BLUE, pieces=[*base_win, (2, 0, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (0, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == None
+
+    state = State(Player.BLUE, pieces=[*base_win, (0, 0, Piece.BLUE_MEDIUM)])
+    assert state.is_win() == None
+
+    state = State(Player.BLUE, pieces=[*base_win, (0, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == None
+
+    # Test where blue has three pieces along an outside row consisting of small
+    # and medium pieces.
+    base_win = [
+        (0, 0, Piece.ORANGE_SMALL),
+        (0, 1, Piece.ORANGE_SMALL),
+        (0, 2, Piece.ORANGE_MEDIUM),
+    ]
+
+    state = State(Player.BLUE, pieces=base_win)
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 0, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 1, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 2, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 0, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 1, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 2, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 0, Piece.ORANGE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 1, Piece.ORANGE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 2, Piece.ORANGE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 0, Piece.ORANGE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 1, Piece.ORANGE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 2, Piece.ORANGE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (2, 2, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(Player.BLUE, pieces=[*base_win, (1, 2, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.ORANGE
+
+    state = State(
+        Player.BLUE, pieces=[*base_win, (2, 0, Piece.BLUE_BIG), (2, 2, Piece.BLUE_BIG)]
+    )
     assert state.is_win() == Player.ORANGE
 
     state = State(Player.BLUE, pieces=[*base_win, (0, 0, Piece.BLUE_BIG)])
