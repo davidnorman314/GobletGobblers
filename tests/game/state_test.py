@@ -474,8 +474,8 @@ def test_is_win_diagonal():
     assert state.is_win() == None
 
 
-def test_is_win_row():
-    """Tests the is_win method where the win is along a row."""
+def test_is_win_row_column_outside():
+    """Tests the is_win method where the win is along an outside row or column."""
 
     # Test where blue has three pieces along an outside row and the big piece
     # is in the middle.
@@ -713,6 +713,47 @@ def test_is_win_row():
     assert state.is_win() == None
 
     state = State(Player.BLUE, pieces=[*base_win, (0, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == None
+
+
+def test_is_win_row_column_inside():
+    """Tests the is_win method where the win is along an inside row or column."""
+
+    # Test where blue has three pieces along an inside row.
+    base_win = [
+        (1, 0, Piece.BLUE_SMALL),
+        (1, 1, Piece.BLUE_SMALL),
+        (1, 2, Piece.BLUE_MEDIUM),
+    ]
+
+    state = State(Player.ORANGE, pieces=base_win)
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 0, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 2, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (2, 2, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 1, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (0, 2, Piece.BLUE_BIG)])
+    assert state.is_win() == Player.BLUE
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 0, Piece.ORANGE_BIG)])
+    assert state.is_win() == None
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 0, Piece.ORANGE_MEDIUM)])
+    assert state.is_win() == None
+
+    state = State(Player.ORANGE, pieces=[*base_win, (1, 1, Piece.ORANGE_BIG)])
     assert state.is_win() == None
 
 
