@@ -6,12 +6,12 @@ import numpy as np
 
 
 class Piece(Enum):
-    ORANGE_BIG = 0x01
+    ORANGE_BIG = 0x04
     ORANGE_MEDIUM = 0x02
-    ORANGE_SMALL = 0x04
-    BLUE_BIG = 0x10
+    ORANGE_SMALL = 0x01
+    BLUE_BIG = 0x40
     BLUE_MEDIUM = 0x20
-    BLUE_SMALL = 0x20
+    BLUE_SMALL = 0x10
 
 
 class Player(Enum):
