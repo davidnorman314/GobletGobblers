@@ -37,6 +37,8 @@ class State:
 
     win_indices: list[list[int]] = None
 
+    _cannot_place_pieces: np.ndarray = None
+
     def __init__(
         self,
         to_play: Player,
@@ -51,6 +53,45 @@ class State:
 
         if initial_board is None:
             initial_board = np.zeros(shape=9, dtype=np.int8)
+
+        # Initialize _cannot_place_pieces
+        self._cannot_place_pieces = np.zeros(
+            Player.BLUE.value + Player.ORANGE.value + 1, dtype=np.int8
+        )
+        self._cannot_place_pieces[Piece.ORANGE_BIG.value] = (
+            Piece.BLUE_BIG.value + Piece.ORANGE_BIG.value
+        )
+        self._cannot_place_pieces[Piece.ORANGE_MEDIUM.value] = (
+            Piece.BLUE_BIG.value
+            + Piece.ORANGE_BIG.value
+            + Piece.BLUE_MEDIUM.value
+            + Piece.ORANGE_MEDIUM.value
+        )
+        self._cannot_place_pieces[Piece.ORANGE_SMALL.value] = (
+            Piece.BLUE_BIG.value
+            + Piece.ORANGE_BIG.value
+            + Piece.BLUE_MEDIUM.value
+            + Piece.ORANGE_MEDIUM.value
+            + Piece.BLUE_SMALL.value
+            + Piece.ORANGE_SMALL.value
+        )
+        self._cannot_place_pieces[Piece.BLUE_BIG.value] = (
+            Piece.BLUE_BIG.value + Piece.ORANGE_BIG.value
+        )
+        self._cannot_place_pieces[Piece.BLUE_MEDIUM.value] = (
+            Piece.BLUE_BIG.value
+            + Piece.ORANGE_BIG.value
+            + Piece.BLUE_MEDIUM.value
+            + Piece.ORANGE_MEDIUM.value
+        )
+        self._cannot_place_pieces[Piece.BLUE_SMALL.value] = (
+            Piece.BLUE_BIG.value
+            + Piece.ORANGE_BIG.value
+            + Piece.BLUE_MEDIUM.value
+            + Piece.ORANGE_MEDIUM.value
+            + Piece.BLUE_SMALL.value
+            + Piece.ORANGE_SMALL.value
+        )
 
         # Initialize win_indices, if necessary
         if self.win_indices == None:
@@ -155,6 +196,25 @@ class State:
             return Player.ORANGE
         else:
             return None
+
+    def valid_moves(self):
+        """Returns all valid moves in the current state."""
+
+        # Moving pieces from the players hand onto the board.
+        if self.to_play == Player.BLUE:
+            pieces_in_hand = [Piece.BLUE_BIG, Piece.BLUE_MEDIUM, Piece.BLUE_SMALL]
+        else:
+            pieces_in_hand = [Piece.ORANGE_BIG, Piece.ORANGE_MEDIUM, Piece.ORANGE_SMALL]
+
+        ret = []
+        for piece in pieces_in_hand:
+            for row in range(3):
+                for col in range(3):
+                    current_pieces = self._board[3 * row + col]
+                    if (current_pieces & self._cannot_place_pieces[piece.value]) == 0:
+                        ret.append((piece, None, None, row, col))
+
+        return ret
 
     def __eq__(self, o):
         assert isinstance(o, State)
