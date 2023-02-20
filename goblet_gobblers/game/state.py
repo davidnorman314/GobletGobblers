@@ -200,14 +200,26 @@ class State:
     def valid_moves(self):
         """Returns all valid moves in the current state."""
 
-        # Moving pieces from the players hand onto the board.
+        # Find the pieces in the players hand
         if self.to_play == Player.BLUE:
             pieces_in_hand = [Piece.BLUE_BIG, Piece.BLUE_MEDIUM, Piece.BLUE_SMALL]
         else:
             pieces_in_hand = [Piece.ORANGE_BIG, Piece.ORANGE_MEDIUM, Piece.ORANGE_SMALL]
+        piece_counts = [0] * 3
 
+        for row in range(3):
+            for col in range(3):
+                current_pieces = self._board[3 * row + col]
+                for i in range(len(pieces_in_hand)):
+                    if current_pieces & pieces_in_hand[i].value > 0:
+                        piece_counts[i] += 1
+
+        # Moving pieces from the players hand onto the board.
         ret = []
-        for piece in pieces_in_hand:
+        for piece, piece_count in zip(pieces_in_hand, piece_counts):
+            if piece_count == 2:
+                continue
+
             for row in range(3):
                 for col in range(3):
                     current_pieces = self._board[3 * row + col]
