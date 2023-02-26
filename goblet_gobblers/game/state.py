@@ -3,6 +3,7 @@
 from enum import Enum
 
 import numpy as np
+import copy
 
 
 class Piece(Enum):
@@ -39,6 +40,10 @@ class State:
 
     _cannot_place_pieces: np.ndarray = None
 
+    _cannot_move_pieces: np.ndarray = None
+
+    _pieces_by_player: dict = None
+
     def __init__(
         self,
         to_play: Player,
@@ -53,6 +58,12 @@ class State:
 
         if initial_board is None:
             initial_board = np.zeros(shape=9, dtype=np.int8)
+
+        # Initialize _pieces_by_player
+        self._pieces_by_player = {
+            Player.BLUE: [Piece.BLUE_BIG, Piece.BLUE_MEDIUM, Piece.BLUE_SMALL],
+            Player.ORANGE: [Piece.ORANGE_BIG, Piece.ORANGE_MEDIUM, Piece.ORANGE_SMALL],
+        }
 
         # Initialize _cannot_place_pieces
         self._cannot_place_pieces = np.zeros(
@@ -91,6 +102,31 @@ class State:
             + Piece.ORANGE_MEDIUM.value
             + Piece.BLUE_SMALL.value
             + Piece.ORANGE_SMALL.value
+        )
+
+        # Initialize _cannot_move_pieces
+        self._cannot_move_pieces = np.zeros(
+            Player.BLUE.value + Player.ORANGE.value + 1, dtype=np.int8
+        )
+        self._cannot_move_pieces[Piece.ORANGE_BIG.value] = 0
+        self._cannot_move_pieces[Piece.ORANGE_MEDIUM.value] = (
+            Piece.BLUE_BIG.value + Piece.ORANGE_BIG.value
+        )
+        self._cannot_move_pieces[Piece.ORANGE_SMALL.value] = (
+            Piece.BLUE_BIG.value
+            + Piece.ORANGE_BIG.value
+            + Piece.BLUE_MEDIUM.value
+            + Piece.ORANGE_MEDIUM.value
+        )
+        self._cannot_move_pieces[Piece.BLUE_BIG.value] = 0
+        self._cannot_move_pieces[Piece.BLUE_MEDIUM.value] = (
+            Piece.BLUE_BIG.value + Piece.ORANGE_BIG.value
+        )
+        self._cannot_move_pieces[Piece.BLUE_SMALL.value] = (
+            Piece.BLUE_BIG.value
+            + Piece.ORANGE_BIG.value
+            + Piece.BLUE_MEDIUM.value
+            + Piece.ORANGE_MEDIUM.value
         )
 
         # Initialize win_indices, if necessary
@@ -201,22 +237,19 @@ class State:
         """Returns all valid moves in the current state."""
 
         # Find the pieces in the players hand
-        if self.to_play == Player.BLUE:
-            pieces_in_hand = [Piece.BLUE_BIG, Piece.BLUE_MEDIUM, Piece.BLUE_SMALL]
-        else:
-            pieces_in_hand = [Piece.ORANGE_BIG, Piece.ORANGE_MEDIUM, Piece.ORANGE_SMALL]
+        player_pieces = self._pieces_by_player[self.to_play]
         piece_counts = [0] * 3
 
         for row in range(3):
             for col in range(3):
                 current_pieces = self._board[3 * row + col]
-                for i in range(len(pieces_in_hand)):
-                    if current_pieces & pieces_in_hand[i].value > 0:
+                for i in range(len(player_pieces)):
+                    if current_pieces & player_pieces[i].value > 0:
                         piece_counts[i] += 1
 
         # Moving pieces from the players hand onto the board.
         ret = []
-        for piece, piece_count in zip(pieces_in_hand, piece_counts):
+        for piece, piece_count in zip(player_pieces, piece_counts):
             if piece_count == 2:
                 continue
 
@@ -225,6 +258,28 @@ class State:
                     current_pieces = self._board[3 * row + col]
                     if (current_pieces & self._cannot_place_pieces[piece.value]) == 0:
                         ret.append((piece, None, None, row, col))
+
+        # Moving pieces on the board to another square
+        for from_row in range(3):
+            for from_col in range(3):
+                from_pieces = self._board[3 * from_row + from_col]
+                for piece in player_pieces:
+                    if from_pieces & piece.value == 0:
+                        continue
+
+                    if (from_pieces & self._cannot_move_pieces[piece.value]) > 0:
+                        continue
+
+                    for to_row in range(3):
+                        for to_col in range(3):
+                            if to_row == from_row and to_col == from_col:
+                                continue
+
+                            to_pieces = self._board[3 * to_row + to_col]
+                            if (
+                                to_pieces & self._cannot_place_pieces[piece.value]
+                            ) == 0:
+                                ret.append((piece, from_row, from_col, to_row, to_col))
 
         return ret
 
